@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h2>Incidents</h2>
+    <a href="{% url 'incident-create' %}" class="btn btn-primary">+ New Incident</a>
+</div>
+
+<div class="mb-3">
+    <a href="{% url 'incident-list' %}" class="btn btn-sm btn-outline-light">All</a>
+    <a href="?status=open" class="btn btn-sm btn-outline-danger">Open</a>
+    <a href="?status=in_progress" class="btn btn-sm btn-outline-warning">In Progress</a>
+    <a href="?status=resolved" class="btn btn-sm btn-outline-success">Resolved</a>
+</div>
+
+<table class="table table-dark table-striped align-middle">
+    <thead>
+        <tr>
+            <th>Title</th>
+            <th>Status</th>
+            <th>Priority</th>
+            <th>Assignee</th>
+            <th>Created</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for incident in incidents %}
+        <tr>
+            <td>{{ incident.title }}</td>
+            <td>
+                <span class="badge bg-{% if incident.status == 'resolved' %}success{% elif incident.status == 'in_progress' %}warning{% else %}danger{% endif %}">
+                    {{ incident.get_status_display }}
+                </span>
+            </td>
+            <td>{{ incident.get_priority_display }}</td>
+            <td>{{ incident.assignee|default:"Unassigned" }}</td>
+            <td>{{ incident.created_at|date:"d M Y H:i" }}</td>
+            <td><a href="{% url 'incident-detail' incident.pk %}" class="btn btn-sm btn-outline-info">View</a></td>
+        </tr>
+        {% empty %}
+        <tr><td colspan="6">No incidents logged yet.</td></tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{% if is_paginated %}
+<nav>
+    <ul class="pagination">
+        {% if page_obj.has_previous %}
+        <li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}">Previous</a></li>
+        {% endif %}
+        <li class="page-item disabled"><span class="page-link">Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span></li>
+        {% if page_obj.has_next %}
+        <li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}">Next</a></li>
+        {% endif %}
+    </ul>
+</nav>
+{% endif %}
+{% endblock %}

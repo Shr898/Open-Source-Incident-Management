@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>{{ incident.title }}</h2>
+<p><strong>Status:</strong> {{ incident.get_status_display }}</p>
+<p><strong>Priority:</strong> {{ incident.get_priority_display }}</p>
+<p><strong>Assignee:</strong> {{ incident.assignee|default:"Unassigned" }}</p>
+<p><strong>Description:</strong></p>
+<p>{{ incident.description }}</p>
+<p class="text-muted">Created {{ incident.created_at|date:"d M Y H:i" }} | Last updated {{ incident.updated_at|date:"d M Y H:i" }}</p>
+
+{% if user.is_staff %}
+<a href="{% url 'incident-update' incident.pk %}" class="btn btn-warning">Edit / Resolve</a>
+{% endif %}
+<a href="{% url 'incident-list' %}" class="btn btn-secondary">Back</a>
+{% endblock %}
