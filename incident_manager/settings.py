@@ -1,4 +1,8 @@
+import os 
+from dotenv import load_dotenv
 from pathlib import Path
+
+load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -93,17 +97,23 @@ STATIC_URL = 'static/'
 
 
 MAILERS = {
-    'default': {
-        'BACKEND': 'django.core.mail.backends.console.EmailBackend',
+    "default": {
+        "BACKEND": "django.core.mail.backends.smtp.EmailBackend",
+        "OPTIONS": {
+            "host": "smtp.gmail.com",
+            "port": 587,
+            "use_tls": True,
+            "username": os.environ.get("GMAIL_USER"),
+            "password": os.environ.get("GMAIL_APP_PASSWORD"),
+        },
     },
 }
 
+DEFAULT_FROM_EMAIL = os.environ.get("DEFAULT_FROM_EMAIL")
+INCIDENT_NOTIFY_EMAIL = os.environ.get("INCIDENT_NOTIFY_EMAIL")
 
 
 LOGIN_URL = 'login'
 LOGIN_REDIRECT_URL = 'incident-list'
 LOGOUT_REDIRECT_URL = 'login'
 
-
-DEFAULT_FROM_EMAIL = 'incidents@example.com'
-INCIDENT_NOTIFY_EMAIL = 'shreyasmodedev@gmail.com'   # who receives the notification emails

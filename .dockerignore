@@ -5,3 +5,4 @@ __pycache__
 .gitignore
 screenshots
 db.sqlite3
+.env

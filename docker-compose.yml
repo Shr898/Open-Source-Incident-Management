@@ -7,3 +7,5 @@ services:
       - ./db.sqlite3:/app/db.sqlite3
     environment:
       - DEBUG=False
+    env_file:
+      - .env

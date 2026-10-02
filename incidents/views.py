@@ -48,7 +48,7 @@ class IncidentCreateView(LoginRequiredMixin, CreateView):
             ),
             from_email=settings.DEFAULT_FROM_EMAIL,
             recipient_list=[settings.INCIDENT_NOTIFY_EMAIL],
-            fail_silently=True,
+            fail_silently=False,
         )
         return response
 
@@ -74,6 +74,6 @@ class IncidentUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
                 message=f"The incident '{self.object.title}' has been marked resolved.",
                 from_email=settings.DEFAULT_FROM_EMAIL,
                 recipient_list=[settings.INCIDENT_NOTIFY_EMAIL],
-                fail_silently=True,
+                fail_silently=False,
             )
         return response
